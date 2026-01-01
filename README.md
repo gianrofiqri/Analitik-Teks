@@ -1,4 +1,4 @@
-#  Analisis Sentimen Tweet Deforestasi Indonesia dengan IndoBERT
+#  Analisis Sentimen Terhadap Isu Deforestasi pada Media Sosial Twitter Berbahasa Indonesia 
 
 
 <img width="944" height="528" alt="image" src="https://github.com/user-attachments/assets/c2fb9aaf-d308-4ec6-91af-a216aa0ae758" />
