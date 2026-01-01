@@ -1,6 +1,7 @@
-# #  Analisis Sentimen Tweet Deforestasi Indonesia dengan IndoBERT
+#  Analisis Sentimen Tweet Deforestasi Indonesia dengan IndoBERT
 
-<img width="940" height="526" alt="image" src="https://github.com/user-attachments/assets/13f09626-fd98-4b67-984b-e39d329e7350" />
+
+<img width="944" height="528" alt="image" src="https://github.com/user-attachments/assets/c2fb9aaf-d308-4ec6-91af-a216aa0ae758" />
 
 
 ##  Deskripsi Proyek
@@ -58,6 +59,13 @@ Tahapan preprocessing yang dilakukan:
    - Testing: 15%
 
 ## Model yang Digunakan
+Model untuk Hyperparameter Tuning
+
+|No| Model |  Model ID (Hugging Face) |
+|----|-------|-------------------------|
+| 1 | RoBERTa Indonesian | `cahya/roberta-base-indonesian-1.5G` |
+
+Model RoBERTa Indonesian digunakan untuk mencari kombinasi hyperparameter terbaik (12 eksperimen).
 
 ### Model untuk Perbandingan
 
@@ -66,7 +74,6 @@ Tahapan preprocessing yang dilakukan:
 | 1 | IndoBERT (IndoLEM) | `indolem/indobert-base-uncased` |
 | 2 | IndoBERT (IndoBenchmark) | `indobenchmark/indobert-base-p1` |
 | 3 | mBERT Multilingual | `bert-base-multilingual-uncased` |
-| 4 | RoBERTa Indonesian | `cahya/roberta-base-indonesian-1.5G` |
 
 ### Pendekatan Fine-tuning
 - **Metode**: Full Fine-tuning
@@ -131,7 +138,7 @@ Proyek ini menghasilkan visualisasi:
 - Confusion Matrix
 - Grafik perbandingan model
 
-## 🛠️ Cara Penggunaan
+## Cara Penggunaan
 
 ### Prerequisites
 
@@ -196,3 +203,4 @@ wordcloud>=1.9.0
 2. [IndoBERT: Pre-trained Language Model for Indonesian Language](https://github.com/indobenchmark/indonlu)
 3. [IndoLEM: A Benchmark for Indonesian NLP](https://indolem.github.io/)
 4. [Hugging Face Model Hub](https://huggingface.co/models)
+5. https://www.youtube.com/watch?v=n5Y0RJ5OkdE
