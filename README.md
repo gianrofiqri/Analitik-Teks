@@ -21,14 +21,13 @@ Proyek ini mengimplementasikan sentiment analysis pada tweet berbahasa Indonesia
 | **Sumber** | Twitter (X) |
 | **Topik** | Deforestasi & Pengundulan Hutan di Indonesia |
 | **Periode** | 20 November - 20 Desember 2025 |
-| **Total Tweet** | 1.016 tweets |
-| **Setelah Preprocessing** | 343 tweets |
-| **Dataset Final** | 240 tweets (setelah filter neutral) |
+| **Total Tweet** | 1.018tweets |
+| **Dataset Final** | 1000 tweets (setelah filter neutral) |
 | **Jumlah Kelas** | 2 (Positif, Negatif) |
 
 ### Distribusi Kelas
-- **Negatif**: 185 tweets (77.1%)
-- **Positif**: 55 tweets (22.9%)
+- **Negatif**: 914 tweets (91.4%)
+- **Positif**: 86 tweets (8.6%)
 
 > Dataset memiliki ketidakseimbangan kelas yang ditangani dengan **weighted loss function**.
 
@@ -63,7 +62,7 @@ Model untuk Hyperparameter Tuning
 
 |No| Model |  Model ID (Hugging Face) |
 |----|-------|-------------------------|
-| 1 | RoBERTa Indonesian | `cahya/roberta-base-indonesian-1.5G` |
+| 1 | indoBERT | `indobenchmark/indobert-base-p1` |
 
 Model RoBERTa Indonesian digunakan untuk mencari kombinasi hyperparameter terbaik (12 eksperimen).
 
@@ -100,13 +99,13 @@ Model RoBERTa Indonesian digunakan untuk mencari kombinasi hyperparameter terbai
 |-----------|---------------|-------------|
 | **Learning Rate** | 5e-5 | Learning rate yang lebih tinggi (5e-5) memberikan konvergensi lebih cepat pada dataset kecil tanpa menyebabkan overfitting |
 | **Batch Size** | 8 | Batch size kecil memberikan gradient yang lebih noisy namun membantu generalisasi pada dataset terbatas |
-| **Epochs** | 3 | Cukup untuk konvergensi tanpa overfitting, ditunjukkan oleh validation loss yang stabil |
+| **Epochs** | 5 | Cukup untuk konvergensi tanpa overfitting, ditunjukkan oleh validation loss yang stabil |
 
 ### Konfigurasi Terbaik
 ```
 Learning Rate: 5e-05
 Batch Size: 8
-Epochs: 3
+Epochs: 5
 Validation Accuracy: 88.89%
 ```
 
@@ -116,19 +115,19 @@ Validation Accuracy: 88.89%
 
 | Model | Val Accuracy | Val Loss | Train Loss |
 |-------|--------------|----------|------------|
-| **IndoBenchmark-IndoBERT** | **86.11%** | 0.7940 | 0.3166 |
-| mBERT-Multilingual | 80.56% | 0.6772 | 0.6999 |
-| IndoLEM-IndoBERT | 77.78% | 0.7901 | 0.6650 |
+| **IndoBenchmark-IndoBERT** | **93.33%** | 1.059707 | 0.529429 |
+| mBERT-Multilingual | 92.66% | 1.739180 | 0.807487 |
+| IndoLEM-IndoBERT | 91.33% | 0.770590 | 0.746658 |
 
 ### Hasil Hyperparameter Tuning (RoBERTa Indonesian)
 
 | Exp | LR | Batch | Epochs | Val Acc | Val Loss |
 |-----|-----|-------|--------|---------|----------|
-| 7 | 5e-05 | 8 | 3 | **88.89%** | 0.4173 |
-| 8 | 5e-05 | 8 | 5 | 86.11% | 0.5232 |
-| 2 | 1e-05 | 8 | 5 | 86.11% | 0.5355 |
-| 9 | 5e-05 | 16 | 3 | 83.33% | 0.4831 |
-| 10 | 5e-05 | 16 | 5 | 83.33% | 0.5567 |
+| 10 | 5e-05 | 8 | 5 | **92.67%** | 1.1340 |
+| 2 | 1e-05 | 8 | 5 | 92% | 1.4792 |
+| 12 | 5e-05 | 16 | 5 | 92% | 2.3006 |
+| 9 | 5e-05 | 8 | 3 | 92% | 0.9178 |
+| 11 | 5e-05 | 16 | 3 | 92% | 1.5456 |
 
 ### Visualisasi
 
@@ -176,26 +175,26 @@ wordcloud>=1.9.0
 
 ### Temuan Utama
 
-1. **IndoBenchmark-IndoBERT** menunjukkan performa terbaik dengan akurasi validasi **86.11%**, mengungguli model multilingual (mBERT) dan IndoLEM-IndoBERT.
+1. **IndoBenchmark-IndoBERT**menunjukkan performa terbaik dengan akurasi validasi mencapai 93,33%, mengungguli model IndoLEM-IndoBERT (92,67%) dan model multilingual mBERT (91,33%).
 
-2. **Learning rate 5e-5** optimal untuk dataset kecil, memberikan konvergensi cepat tanpa overfitting.
+2. **Learning rate 5e-5** merupakan nilai optimal dari rentang yang diuji (1e-5 hingga 5e-5), memberikan akurasi validasi tertinggi untuk proses fine-tuning.
 
 3. **Batch size 8** lebih efektif dibanding 16 pada dataset terbatas, karena memberikan update gradient yang lebih frequent.
 
-4. **3 epochs** sudah cukup untuk mencapai konvergensi optimal, training lebih lanjut cenderung menyebabkan overfitting.
+4. **5 epochs** diperlukan untuk mencapai akurasi optimal pada konfigurasi terbaik, menunjukkan bahwa model membutuhkan durasi tersebut untuk konvergensi tanpa mengalami overfitting yang signifikan.
 
 ### Limitasi
 
-- Dataset relatif kecil (240 samples setelah filtering)
-- Ketidakseimbangan kelas yang signifikan (77% Negatif vs 23% Positif)
-- Pelabelan sentimen menggunakan rule-based approach, bukan manual annotation
+- Dataset relatif kecil dengan hanya 1.000 tweet yang memenuhi kriteria filter minimal 5 kata.
+- Ketidakseimbangan kelas yang ekstrem, di mana sentimen negatif mendominasi sebesar 91,4% dibandingkan sentimen positif yang hanya 8,6%.
+- Pelabelan otomatis menggunakan metode Context-Aware Pattern Matching (regex), bukan melalui anotasi manual oleh pakar, yang berisiko pada akurasi label dasar.
 
 ### Rekomendasi
 
-1. Menggunakan dataset yang lebih besar untuk meningkatkan generalisasi
-2. Melakukan manual annotation untuk label yang lebih akurat
-3. Mencoba teknik data augmentation untuk mengatasi class imbalance
-4. Eksplorasi model IndoBERT-Large atau XLM-RoBERTa untuk performa lebih baik
+1. Memperluas Dataset: Mengumpulkan volume data yang lebih besar untuk meningkatkan kemampuan generalisasi model terhadap berbagai variasi opini publik.
+2. Validasi Manual: Melakukan anotasi manual (manual labeling) pada sebagian dataset untuk memastikan akurasi label dan memvalidasi efektivitas sistem pattern matching.
+3. Augmentasi Data: Mencoba teknik augmentasi data khusus bahasa Indonesia untuk menambah jumlah sampel pada kelas minoritas (Positif) guna menyeimbangkan distribusi kelas.
+4. Eksplorasi Model Kontemporer: Mempertimbangkan penggunaan varian model yang lebih besar atau arsitektur lain yang dioptimalkan untuk bahasa Indonesia guna menangkap konteks slang dan singkatan Twitter secara lebih mendalam.
 
 ##  Referensi
 
